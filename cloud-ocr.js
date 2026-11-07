@@ -42,15 +42,18 @@ function parseCandidates(annotation={},platform="genie"){
 }
 function parseList(annotation={}){
  const lines=String(annotation.text||'').normalize('NFKC').split(/\n/).map(s=>s.trim()).filter(Boolean),out=[];
- const num='([0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)';
+ const number='([0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)';
+ const marker='[|｜▷▶▹>DＫKᐅ△]?';
+ const artistCount=new RegExp('^(.*?)PLAVE\\s*'+marker+'\\s*'+number+'\\s*$','i');
+ const countOnly=new RegExp('^'+marker+'\\s*'+number+'\\s*$','i');
+ const artistOnly=new RegExp('^(.*?)PLAVE\\s*'+marker+'\\s*$','i');
  for(let i=0;i<lines.length;i++){
-  const line=lines[i],m=line.match(new RegExp('^(?:PLAVE\\s*[|｜]?\\s*)?[▷▶▹>]?\\s*'+num+'$','i'));
-  if(!m)continue;
-  const inline=/PLAVE/i.test(line),artist=inline?i:i-1;
-  if(!inline&&!/PLAVE/i.test(lines[artist]||''))continue;
-  const title=lines[artist-1];if(!title||/^(PLAVE|최근|많이|보관함)/i.test(title))continue;
-  const count=Number(m[1].replaceAll(',',''));if(!Number.isSafeInteger(count)||count>999999999)continue;
-  out.push({count,label:title+' · '+(inline?'PLAVE':lines[artist]),title});
+  let m=lines[i].match(artistCount),title,count;
+  if(m){title=m[1].trim()||lines[i-1];count=m[2];}
+  else {m=lines[i].match(countOnly);const artist=(lines[i-1]||'').match(artistOnly);if(!m||!artist)continue;title=artist[1].trim()||lines[i-2];count=m[1];}
+  if(!title||/^(PLAVE|최근|많이|보관함|전체)/i.test(title))continue;
+  const value=Number(count.replaceAll(',',''));if(!Number.isSafeInteger(value)||value>999999999)continue;
+  out.push({count:value,label:title+' · PLAVE',title});
  }
  return out;
 }
