@@ -166,7 +166,10 @@
     for(let i=0;i<55;i++)circle(ctx,70+(i*173)%940,65+(i*251)%(height-130),i%8===0?1.8:1,'#e6ddff55');
     rounded(ctx, 94, 83, 285, 38, 19, theme.soft);
     tracked(ctx, 'ASTERUM / PLAYLOG', 237, 108, 12, theme.deep, 1.3, 'center');
-    waves(ctx, 879, 103, theme.color);
+    const platform=clean(data.sourceLabel,'지니');
+    const badge=platform==='벅스'?{label:'벅스 · Bugs',color:'#ffb27e'}:platform==='FLO'?{label:'FLO · 플로',color:'#b7acff'}:{label:'지니 · genie',color:'#7bdcff'};
+    rounded(ctx, 650, 76, 334, 100, 24, badge.color+'20',badge.color,2);
+    text(ctx,badge.label,817,139,38,badge.color,800,'center');
     text(ctx, '나의 감상 기록', 96, 169, 31, theme.ink, 700);
     const title = clean(data.title, '오늘의 한 곡'), artist = clean(data.artist, '아티스트'), count = countValue(data.count);
     if (square) {
