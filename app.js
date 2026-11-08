@@ -35,7 +35,7 @@
   }
   function data() {
     const song=songInfo(),row=selected();
-    return {title:song.title,artist:song.artist,count:countValue(),nickname:$('nickname').value||'PLY',date:row.date,
+    return {title:song.title,artist:song.artist,count:countValue(),nickname:'도당',date:row.date,
       theme:state.theme,format:state.format,coverDataUrl:row.coverDataUrl,sourceLabel:({genie:'지니',bugs:'벅스',flo:'FLO'})[row.platform||$('platform').value],period:row.period||'',verified:$('verified').checked&&!validation()};
   }
   function updateDownload() { $('download-btn').disabled=!!validation()||!$('verified').checked||state.busy; }
@@ -107,7 +107,6 @@
     $('theme-name').textContent=window.StreamCard.themes.find(t=>t.id===state.theme).name;
   }
   $('song-search').addEventListener('input',renderSongs);
-  $('nickname').addEventListener('input',draw);
   $('date').addEventListener('input',()=>{if(state.busy)return;selected().date=$('date').value;clearVerification();draw();const error=validation();$('form-error').textContent=error;$('form-error').hidden=!error;});
   $('verified').addEventListener('change',draw);
   for(const format of ['portrait','square'])$(format+'-format').addEventListener('click',()=>{
@@ -219,3 +218,4 @@
   cloudState();
   renderThemes();select(state.selected);
 }());
+

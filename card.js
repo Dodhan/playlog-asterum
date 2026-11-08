@@ -9,7 +9,7 @@
     { id: 'hamin', name: '하민 · 세이지', color: '#70978a', deep: '#2f5148', soft: '#e1ede5', background: '#edf2e9', accent: '#d8c7a2', ink: '#314d43' }
   ];
   const paper = '#171d38';
-  themes.forEach(t=>{t.ink='#f2edff';t.deep='#cfc1ed';t.soft='#272e4d';t.background='#10162e';});
+  themes.forEach(t=>{t.ink='#f2edff';t.deep=t.soft;t.accent=t.color;t.soft='#272e4d';t.background='#10162e';});
   const sans = '"Playlog Sans", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
   const renderIds = new WeakMap();
   const imageCache = new Map();
@@ -87,7 +87,8 @@
   }
   function placeholder(ctx, x, y, size, theme) {
     ctx.save(); rounded(ctx, x, y, size, size, 20); ctx.clip();
-    ctx.fillStyle = theme.soft; ctx.fillRect(x, y, size, size);
+    ctx.fillStyle = paper; ctx.fillRect(x, y, size, size);
+    ctx.fillStyle = theme.color + '38'; ctx.fillRect(x, y, size, size);
     // A cut-paper sleeve, a real grooved disc, and a small abstract audio wave.
     ctx.save(); ctx.translate(x + size * .23, y + size * .17); ctx.rotate(-.15);
     rounded(ctx, -size * .14, -size * .12, size * .55, size * .82, 7, theme.color); ctx.restore();
@@ -141,7 +142,7 @@
     const lineY = height - 181;
     line(ctx, 96, lineY, 984, lineY, theme.deep + '22', 1.5);
     text(ctx, 'RECORDED BY', 99, lineY + 40, 14, theme.deep + 'aa', 700, 'left', '"Playlog Sans", Arial, sans-serif');
-    const nick = fit(ctx, clean(data.nickname, '나의 플레이리스트'), 535, 26, 19, 700);
+    const nick = fit(ctx, '도당', 535, 26, 19, 700);
     text(ctx, nick.value, 98, lineY + 79, nick.size, theme.ink, 700);
     text(ctx, dateValue(data.date), 982, lineY + 77, 25, theme.ink, 500, 'right', '"Playlog Sans", Arial, sans-serif');
     const source = clean(data.sourceLabel, '지니');
